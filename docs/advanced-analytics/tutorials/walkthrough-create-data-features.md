@@ -91,7 +91,7 @@ First, let's do it the way R users are accustomed to: get the data onto your lap
     ```R
     start.time <- proc.time();
   
-    changed_ds <- rxDataStep(inData = featureEngineeringQuery,
+    changed_ds <- rxDataStep(inData = featureDataSource,
     transforms = list(direct_distance=ComputeDist(pickup_longitude,pickup_latitude, dropoff_longitude, dropoff_latitude),
     tipped = "tipped", fare_amount = "fare_amount", passenger_count = "passenger_count",
     trip_time_in_secs = "trip_time_in_secs",  trip_distance="trip_distance",
