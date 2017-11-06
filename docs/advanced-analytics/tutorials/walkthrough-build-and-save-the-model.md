@@ -31,7 +31,7 @@ The model you build is a binary classifier that predicts whether the taxi driver
 1. Call the [rxLogit](https://docs.microsoft.com/r-server/r-reference/revoscaler/rxlogit) function, included in the **RevoScaleR** package, to create a logistic regression model. 
 
     ```R
-    system.time(logitObj <- rxLogit(tipped ~ passenger_count + trip_distance + trip_time_in_secs + direct_distance, data = sql_feature_ds));
+    system.time(logitObj <- rxLogit(tipped ~ passenger_count + trip_distance + trip_time_in_secs + direct_distance, data = featureDataSource));
     ```
 
     The call that builds the model is enclosed in the system.time function. This lets you get the time required to build the model.
@@ -76,7 +76,7 @@ Now that the model is built, you can use to predict whether the driver is likely
       table = "taxiScoreOutput"  )
     ```
 
-    + To make this example simpler, the input to the logistic regression model is the same feature data source (`sql_feature_ds`) that you used to train the model.  More typically, you might have some new data to score with, or you might have set aside some data for testing vs. training.
+    + To make this example simpler, the input to the logistic regression model is the same feature data source (`featureDataSource`) that you used to train the model.  More typically, you might have some new data to score with, or you might have set aside some data for testing vs. training.
   
     + The prediction results will be saved in the table, _taxiscoreOutput_. Notice that the schema for this table is not defined when you create it using rxSqlServerData. The schema is obtained from the rxPredict output.
   
@@ -86,7 +86,7 @@ Now that the model is built, you can use to predict whether the driver is likely
 
     ```R
     rxPredict(modelObject = logitObj,
-        data = sql_feature_ds,
+        data = featureDataSource,
         outData = scoredOutput,
         predVarNames = "Score",
         type = "response",
@@ -139,6 +139,7 @@ In this section, you'll experiment with both techniques.
 2. Using the data in local memory, you load the **ROCR** package, and use the prediction function from that package to create some new predictions.
 
     ```R
+    library('gplots');
     library('ROCR');
     pred <- prediction(scoredOutput$Score, scoredOutput$tipped);
     ```
